@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    tools{
+        maven 'nodejs 22.4.0'
+    }
+    stages{
+        stage("build"){
+            when{
+                changeset "**/result/**"
+            }
+            steps{
+                echo 'Compiling result app'
+                dir('result'){
+                  sh 'npm install'
+                }
+            }
+        }
+        stage("test"){
+            when{
+                changeset "**/result/**"
+            }
+            steps{
+                echo 'Running Unit Tests on result app'
+                dir('result'){
+                    sh 'npm install'
+                    sh 'npm test'
+                } 
+            }
+        }
+    }
+    post{
+        always{
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            echo 'Building multibranch pipeline for result is completed..'
+        }
+            failure{
+                slackSend (channel: "#ci-cd", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+            success{
+                slackSend (channel: "#ci-cd", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+    }
+ }
