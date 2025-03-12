@@ -8,7 +8,7 @@ pipeline {
             steps{
                 echo 'Compiling worker app'
                 dir('worker'){
-                  sh 'npm install'
+                  sh 'mvn compile'
                 }
             }
         }
@@ -16,8 +16,16 @@ pipeline {
             steps{
                 echo 'Running Unit Tests on worker app'
                 dir('worker'){
-                    sh 'npm install; npm test'
+                    sh 'mvn clean test'
                 } 
+            }
+        }
+        stage("package"){
+            steps{
+                echo 'Packaging worker app'
+                dir('worker'){
+                    sh 'mvn package -DskipTests'
+                }
             }
         }
     }
