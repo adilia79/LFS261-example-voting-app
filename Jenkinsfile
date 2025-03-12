@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Three') {
 	    when{
-                branch 'master'
+                branch 'main'
                 changeset "**/worker/**"
             }
             steps {
