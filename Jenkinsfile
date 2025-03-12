@@ -8,7 +8,7 @@ pipeline {
             steps{
                 echo 'Compiling worker app'
                 dir('worker'){
-                  sh 'mvn compile'
+                  sh 'npm install'
                 }
             }
         }
@@ -16,16 +16,8 @@ pipeline {
             steps{
                 echo 'Running Unit Tests on worker app'
                 dir('worker'){
-                    sh 'mvn clean test'
+                    sh 'npm install; npm test'
                 } 
-            }
-        }
-        stage("package"){
-            steps{
-                echo 'Packaging worker app'
-                dir('worker'){
-                    sh 'mvn package -DskipTests'
-                }
             }
         }
     }
@@ -33,6 +25,12 @@ pipeline {
         always{
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             echo 'Building multibranch pipeline for worker is completed..'
+        }
+            failure{
+                slackSend (channel: "#ci-cd", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+            success{
+                slackSend (channel: "#ci-cd", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
         }
     }
  }
