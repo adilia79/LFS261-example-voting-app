@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools{
-        maven 'nodejs 22.4.0'
+        nodejs 'nodejs 22.4.0'
     }
     stages{
         stage("build"){
@@ -34,10 +34,10 @@ pipeline {
             echo 'Building multibranch pipeline for result is completed..'
         }
             failure{
-                slackSend (channel: "#ci-cd", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+                slackSend  (channel: "#devops", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
         }
             success{
-                slackSend (channel: "#ci-cd", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+                slackSend (channel: "#devops", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
         }
     }
  }
