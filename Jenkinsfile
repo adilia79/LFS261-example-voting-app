@@ -34,5 +34,11 @@ pipeline {
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
             echo 'Building multibranch pipeline for worker is completed..'
         }
+            failure{
+                slackSend (channel: "#ci-cd", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+            success{
+                slackSend (channel: "#ci-cd", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
     }
  }
