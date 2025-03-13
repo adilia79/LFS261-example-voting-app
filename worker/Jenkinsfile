@@ -1,12 +1,14 @@
 pipeline {
-    agent any
-    tools{
-        maven 'maven 3.9.8'
+    agent{
+        docker{
+            image 'maven:3.9.8-sapmachine-21'
+            args '-v $HOME/.m2:/root/.m2'
+        }
     }
     stages{
         stage("build"){
             steps{
-                echo 'Compiling worker app'
+                echo 'Building worker app'
                 dir('worker'){
                   sh 'mvn compile'
                 }
@@ -22,23 +24,17 @@ pipeline {
         }
         stage("package"){
             steps{
-                echo 'Packaging worker app'
+                echo 'Packaging worker app into a jarfile'
                 dir('worker'){
                     sh 'mvn package -DskipTests'
+                     archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
                 }
             }
         }
     }
     post{
         always{
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            echo 'Building multibranch pipeline for worker is completed..'
-        }
-            failure{
-                slackSend (channel: "#devops", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
-        }
-            success{
-                slackSend (channel: "#devops", message: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+            echo 'The job is complete'
         }
     }
  }
