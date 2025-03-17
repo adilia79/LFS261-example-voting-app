@@ -12,9 +12,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/worker/**'
-      }
+#      when {
+#        changeset '**/worker/**'
+#      }
       steps {
         echo 'Compiling worker app..'
         dir(path: 'worker') {
@@ -32,9 +32,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/worker/**'
-      }
+#      when {
+#        changeset '**/worker/**'
+#      }
       steps {
         echo 'Running Unit Tets on worker app.'
         dir(path: 'worker') {
@@ -54,7 +54,7 @@ pipeline {
       }
       when {
         branch 'main'
-        changeset '**/worker/**'
+#        changeset '**/worker/**'
       }
       steps {
         echo 'Packaging worker app'
@@ -69,7 +69,7 @@ pipeline {
     stage('worker-docker-package') {
       agent any
       when {
-        changeset '**/worker/**'
+ #       changeset '**/worker/**'
         branch 'main'
       }
       steps {
@@ -92,9 +92,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/result/**'
-      }
+#      when {
+#        changeset '**/result/**'
+#      }
       steps {
         echo 'Compiling result app..'
         dir(path: 'result') {
@@ -111,9 +111,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/result/**'
-      }
+#      when {
+#        changeset '**/result/**'
+#      }
       steps {
         echo 'Running Unit Tests on result app..'
         dir(path: 'result') {
@@ -127,7 +127,7 @@ pipeline {
     stage('result-docker-package') {
       agent any
       when {
-        changeset '**/result/**'
+#        changeset '**/result/**'
         branch 'main'
       }
       steps {
@@ -150,9 +150,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/vote/**'
-      }
+#      when {
+#        changeset '**/vote/**'
+#      }
       steps {
         echo 'Compiling vote app.'
         dir(path: 'vote') {
@@ -170,9 +170,9 @@ pipeline {
         }
 
       }
-      when {
-        changeset '**/vote/**'
-      }
+#      when {
+#        changeset '**/vote/**'
+#      }
       steps {
         echo 'Running Unit Tests on vote app.'
         dir(path: 'vote') {
@@ -186,7 +186,7 @@ pipeline {
     stage('vote integration'){ 
     agent any 
     when{ 
-      changeset "**/vote/**" 
+#      changeset "**/vote/**" 
       branch 'main' 
     } 
     steps{ 
